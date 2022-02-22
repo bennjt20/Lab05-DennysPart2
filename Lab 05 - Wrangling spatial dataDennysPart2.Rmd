@@ -17,33 +17,104 @@ states <- read_csv("data/states.csv")
 ```
 
 ### Exercise 1
+How many Denny’s locations are there in Alaska?
+There are 3 locations in AK.
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r Ex1}
+dennys_ak <- dennys %>%
+  filter(state == "AK")
+nrow(dennys_ak)
+```
 
 ### Exercise 2
+How many La Quinta locations are there in Alaska?
+There are 2 locations in AK.
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r Ex2}
+laquinta_ak <- laquinta %>%
+  filter(state == "AK")
+nrow(laquinta_ak)
+```
+
 
 ### Exercise 3
 
-...
+```{r Ex3}
+dennys_laquinta_ak <- full_join(dennys_ak, laquinta_ak, by = "state")
+dennys_laquinta_ak
+```
 
 ### Exercise 4
+How many observations are in the joined dn_lq_ak data frame? There are 6 observations.
 
-...
+What are the names of the variables in this data frame? Address.x, City.x, State.x, zip.x, longitude.x, latitude.x 
 
-### Exercise 5
+```{r Ex4}
+laquinta_ak <- laquinta %>%
+  filter(state == "AK")
+nrow(laquinta_ak)
+```
 
-...
+### Exercise 5  
+What function from the tidyverse do we use the add a new variable to a data frame while keeping the existing variables?
+The mutate function will help us to add a new variable while keeping the existing variable. 
 
-### Exercise 6
+### Exercise 6 Create "distance" variable
+Calculate the distances between all pairs of Denny’s and La Quinta locations and save this variable as "distance". Make sure to save this variable in THE "dn_lq_ak" data frame so that you can use it later....
 
-...
+```{r Ex6}
+starwars <- starwars %>%
+ mutate
+haversine <- function(long1, lat1, long2, lat2, round = 3) {
+  # convert to radians
+  long1 = long1 * pi / 180
+  lat1  = lat1  * pi / 180
+  long2 = long2 * pi / 180
+  lat2  = lat2  * pi / 180
+  
+  R = 6371 # Earth mean radius in km
+  
+  a = sin((lat2 - lat1)/2)^2 + cos(lat1) * cos(lat2) * sin((long2 - long1)/2)^2
+  d = R * 2 * asin(sqrt(a))
+  
+  return( round(d,round) ) # distance in km
+}
+```
 
-Add exercise headings as needed.
+
+
+### Exercise 7 
+    [Note: Have to have "distance" variable, created in Ex6 above] Calculate the minimum distance between a Denny’s and La Quinta for each Denny’s location. To do so we group by Denny’s locations and calculate a new variable that stores the information for the minimum distance.
+
+```{r Ex7}
+dennys_laquinta_ak_mindist <- dennys_laquinta_ak %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance))
+```
+
+
+
+### Exercise 8
+Describe the distribution of the distances Denny’s and the nearest La Quinta locations in Alaska. Also include an appripriate visualization and relevant summary statistics.
+
+```{r Ex8}
+
+```
+
+### Exercise 9
+Repeat the same analysis for North Carolina: (i) filter Denny’s and La Quinta Data Frames for NC, (ii) join these data frames to get a complete list of all possible pairings, (iii) calculate the distances between all possible pairings of Denny’s and La Quinta in NC, (iv) find the minimum distance between each Denny’s and La Quinta location, (v) visualize and describe the distribution of these shortest distances using appropriate summary statistics.
+
+```{r Ex9}
+
+```
+
+### Exercise 10
+Repeat the same analysis for Texas.
+
+
+### Exercise 11
+Repeat the same analysis for a state of your choosing, different than the ones we covered so far.
+
+
+### Exercise 12
+Among the states you examined, where is Mitch Hedberg’s joke most likely to hold true? Explain your reasoning.
