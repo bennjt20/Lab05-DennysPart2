@@ -62,9 +62,17 @@ The mutate function will help us to add a new variable while keeping the existin
 ### Exercise 6 Create "distance" variable
 Calculate the distances between all pairs of Denny’s and La Quinta locations and save this variable as "distance". Make sure to save this variable in THE "dn_lq_ak" data frame so that you can use it later....
 
+dennys_laquinta_ak <- dennys_laquinta_ak %>%
+summary(dennys) %>%
+glimpse(dennys)
+```{r Ex6glimpse}
+?dennys
+```
+
+dennys_laquinta_ak <- dennys_laquinta_ak %>%
+mutate(distance=
 ```{r Ex6}
-starwars <- starwars %>%
- mutate
+
 haversine <- function(long1, lat1, long2, lat2, round = 3) {
   # convert to radians
   long1 = long1 * pi / 180
@@ -81,7 +89,24 @@ haversine <- function(long1, lat1, long2, lat2, round = 3) {
 }
 ```
 
+```{r Ex6Testing}
+my_points <- matrix(c(81.25798, 73.81277,    # Create longitude/latitude matrix
+                      14.91254, 18.18145),
+                    nrow = 2)
+colnames(my_points) <- c("longitude", "latitude")
+rownames(my_points) <- c("point_1", "point_2")
+my_points                                    # Print longitude/latitude matrix
+```
 
+```{r Ex6GeoPack}
+install.packages("geosphere")                # Install & load geosphere
+library("geosphere")
+```
+
+```{r Ex6DistHav}
+my_dist <- distHaversine(my_points)          # Calculate Haversine distance
+my_dist                                      # Print Haversine distance
+```
 
 ### Exercise 7 
     [Note: Have to have "distance" variable, created in Ex6 above] Calculate the minimum distance between a Denny’s and La Quinta for each Denny’s location. To do so we group by Denny’s locations and calculate a new variable that stores the information for the minimum distance.
