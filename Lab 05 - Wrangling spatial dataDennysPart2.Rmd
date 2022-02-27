@@ -17,8 +17,8 @@ states <- read_csv("data/states.csv")
 ```
 
 ### Exercise 1
-How many Denny’s locations are there in Alaska?
-There are 3 locations in AK.
+Q: How many Denny’s locations are there in Alaska?
+A: There are 3 locations in AK.
 
 ```{r Ex1}
 dennys_ak <- dennys %>%
@@ -27,8 +27,8 @@ nrow(dennys_ak)
 ```
 
 ### Exercise 2
-How many La Quinta locations are there in Alaska?
-There are 2 locations in AK.
+Q: How many La Quinta locations are there in Alaska?
+A: There are 2 locations in AK.
 
 ```{r Ex2}
 laquinta_ak <- laquinta %>%
@@ -38,39 +38,55 @@ nrow(laquinta_ak)
 
 
 ### Exercise 3
+Q: How many pairings are there between all Denny’s and all La Quinta locations in Alaska, i.e., how many distances do we need to calculate between the locations of these establishments in Alaska?
+A: 11
+
 
 ```{r Ex3}
 dennys_laquinta_ak <- full_join(dennys_ak, laquinta_ak, by = "state")
 dennys_laquinta_ak
 ```
 
-### Exercise 4
-How many observations are in the joined dn_lq_ak data frame? There are 6 observations.
-
-What are the names of the variables in this data frame? Address.x, City.x, State.x, zip.x, longitude.x, latitude.x 
+### Exercise 4.1
+Q: How many observations are in the joined dennys_laquinta_ak data frame? 
+A: There are 11 observations.
 
 ```{r Ex4}
-laquinta_ak <- laquinta %>%
-  filter(state == "AK")
-nrow(laquinta_ak)
+ncol(dennys_laquinta_ak)
 ```
 
-### Exercise 5  
-What function from the tidyverse do we use the add a new variable to a data frame while keeping the existing variables?
-The mutate function will help us to add a new variable while keeping the existing variable. 
+### Exercise 4.2
+Q: What are the names of the variables in this data frame? 
+A: Address.x, City.x, State.x, zip.x, longitude.x, latitude.x 
+
+
+### Exercise 5 
+Q: What function from the tidyverse do we use the add a new variable to a data frame while keeping the existing variables?
+A: The mutate function will help us to add a new variable while keeping the existing variable. 
 
 ### Exercise 6 Create "distance" variable
-Calculate the distances between all pairs of Denny’s and La Quinta locations and save this variable as "distance". Make sure to save this variable in THE "dn_lq_ak" data frame so that you can use it later....
+Q: Calculate the distances between all pairs of Denny’s and La Quinta locations and save this variable as "distance". Make sure to save this variable in THE "dn_lq_ak" data frame so that you can use it later....
+A: [Note: This is the point where I tried some creative problem solving...]
+
+```{r Ex6DistanceVar}
+dennys_laquinta_ak <- dennys_laquinta_ak %>%
+  mutate(distancevar = case_when(longitude.x == -149.8767 ~ long1,
+                                latitude.x == 61.1953 ~ lat1,
+                                longitude.x == -149.8090 ~ long2,
+                                latitude.x == 61.2097 ~ lat2,
+                                longitude.x == -147.7600 ~ long3,
+                                latitude.x == 64.8366 ~ lat3))
+```
+
 
 dennys_laquinta_ak <- dennys_laquinta_ak %>%
 summary(dennys) %>%
 glimpse(dennys)
-```{r Ex6glimpse}
+```{r Ex6QuestDennys}
 ?dennys
 ```
 
-dennys_laquinta_ak <- dennys_laquinta_ak %>%
-mutate(distance=
+
 ```{r Ex6}
 
 haversine <- function(long1, lat1, long2, lat2, round = 3) {
@@ -89,6 +105,26 @@ haversine <- function(long1, lat1, long2, lat2, round = 3) {
 }
 ```
 
+
+Note: After manually entering the latitude and longitude below, the function did not appear to produce an actual distance in km... 
+```{r Ex6Manual}
+haversine <- function(long1, lat1, long2, lat2, round = 3) {
+  # convert to radians
+  long1 = -149.8767 * pi / 180
+  lat1  = 61.1953  * pi / 180
+  long2 = -149.8090 * pi / 180
+  lat2  = 61.2097  * pi / 180
+  
+  R = 6371 # Earth mean radius in km
+  
+  a = sin((61.2097 - 61.1953)/2)^2 + cos(61.1953) * cos(61.2097) * sin((-149.8090 - -149.8767)/2)^2
+  d = R * 2 * asin(sqrt(a))
+  
+  return( round(d,round) ) # distance in km
+}
+```
+
+These are my attempts to research online and derive a formula to help create the "distance" variable. 
 ```{r Ex6Testing}
 my_points <- matrix(c(81.25798, 73.81277,    # Create longitude/latitude matrix
                       14.91254, 18.18145),
@@ -118,8 +154,9 @@ dennys_laquinta_ak_mindist <- dennys_laquinta_ak %>%
 ```
 
 
+### Exercise 8 
+[Note: I ran into a major brick wall on Exercise #6, which forced me to take a pause at this point and submit what I have, in the interest of time]
 
-### Exercise 8
 Describe the distribution of the distances Denny’s and the nearest La Quinta locations in Alaska. Also include an appripriate visualization and relevant summary statistics.
 
 ```{r Ex8}
