@@ -68,7 +68,7 @@ A: The mutate function will help us to add a new variable while keeping the exis
 Q: Calculate the distances between all pairs of Denny’s and La Quinta locations and save this variable as "distance". Make sure to save this variable in THE "dn_lq_ak" data frame so that you can use it later....
 A: [Note: This is the point where I tried some creative problem solving...]
 
-```{r Ex6DistanceVar}
+``{r Ex6DistanceVar}
 dennys_laquinta_ak <- dennys_laquinta_ak %>%
   mutate(distancevar = case_when(longitude.x == -149.8767 ~ long1,
                                 latitude.x == 61.1953 ~ lat1,
@@ -134,12 +134,12 @@ rownames(my_points) <- c("point_1", "point_2")
 my_points                                    # Print longitude/latitude matrix
 ```
 
-```{r Ex6GeoPack}
+``{r Ex6GeoPack}
 install.packages("geosphere")                # Install & load geosphere
 library("geosphere")
 ```
 
-```{r Ex6DistHav}
+``{r Ex6DistHav}
 my_dist <- distHaversine(my_points)          # Calculate Haversine distance
 my_dist                                      # Print Haversine distance
 ```
@@ -147,7 +147,7 @@ my_dist                                      # Print Haversine distance
 ### Exercise 7 
     [Note: Have to have "distance" variable, created in Ex6 above] Calculate the minimum distance between a Denny’s and La Quinta for each Denny’s location. To do so we group by Denny’s locations and calculate a new variable that stores the information for the minimum distance.
 
-```{r Ex7}
+``{r Ex7}
 dennys_laquinta_ak_mindist <- dennys_laquinta_ak %>%
   group_by(address.x) %>%
   summarize(closest = min(distance))
